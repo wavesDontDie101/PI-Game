@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>pi game wip</title>
+<style>
+body {
+    background-color: dimgray;
+    font: 15px "Courier New";
+}
+button {
+    background-color: gray;
+    font: 15px "Courier New";
+}
+#dateTime {
+    background-color: black;
+    color: red;
+    text-align: center;
+    margin: auto;
+    width: 150px;
+}
+#viewWindow {
+    background-color: gray;
+    margin: auto;
+    width: 30vw;
+    height: 30vw;
+}
+#map {
+    background-color: black;
+    width: 15%;
+    height: 15%;
+    transition: 0.5s;
+}
+#map:hover {
+    background-color: gray;
+    width: 100%;
+    height: 100%;
+}
+.place {
+    background-color: white;
+    width: 10%;
+    height: 10%;
+    margin: 3%;
+    float: left;
+}
+#dialogue {
+    user-select: none;
+    background-color: gray;
+    position: absolute;
+    top: 0%;
+    right: 2%;
+    width: 30%;
+    height: 50px;
+    color: black;
+    transition: color 1s ease-out 1s;
+}
+#dialogue.fade {
+    color: gray;
+}
+#log {
+    background-color: gray;;
+    position: absolute;
+    top: 0%;
+    left: 2%;
+    width: 30%;
+}
+</style>
+</head>
+
+<body>
+    <div id="dateTime">1 monday | 00:00</div>
+    <div id="viewWindow">
+        <div id="map">
+            <div class="place"></div>
+            <div class="place"></div>
+            <div class="place"></div>
+            <div class="place"></div>
+        </div>
+    </div>
+    <br>
+    <p id="dialogue"></p>
+    <button onclick="incrementClock(15)">increment clock</button>
+    <button onclick="dialogue()">dialogue</button>
+    <button onclick="deliver()">deliver</button>
+    <p id="log">[text goes here]</p>
+
+<script>
+var totalMin = 0;
+var day = 1;
+var countDotW = 0;
+const arrDotW = ["monday", "tuesday", "wednesday",
+"thursday", "friday", "saturday", "sunday"];
+
+function addText(t) {
+    var soFar = document.getElementById("log").innerHTML;
+    document.getElementById("log").innerHTML = t + "<br>" + soFar;
+}
+
+function incrementClock(min) {
+    totalMin += min;
+
+    if (totalMin >= 1440) {     // new day
+        totalMin -= 1440;       // minute reset
+        day++;                  // increments day of month
+        countDotW++;            // increments day of week
+        if (countDotW == 7)
+            countDotW = 0;      // week reset
+    }
+
+    var currentTime = Math.trunc(totalMin / 60); // creates, puts hours in currentTime
+    if ((totalMin / 60) < 10)
+        currentTime = "0" + currentTime + ":";   // adds 0 to single digit hours
+    if ((totalMin % 60) < 10)
+        currentTime += "0";                      // adds 0 to single digit minutes
+    currentTime += (totalMin % 60);              // adds minutes to currentTime
+    
+    document.getElementById("dateTime").innerHTML =   // puts date and time in dateTime
+    day + " " + arrDotW[countDotW] + " | " + currentTime;
+}
+
+function openNav() {
+    document.getElementById("map").style.backgroundColor = "red";
+}
+
+function deliver() {        // text box test
+    addText("works!");      // prints "works!" after deliver pressed
+}
+
+function dialogue() {
+    var dialogueBox = document.getElementById("dialogue");
+
+    dialogueBox.innerHTML = "text? here? nah";           // sets dBox text
+    dialogueBox.classList.add("fade");                   // adds fade class to dBox
+    setTimeout(function(){ dialogueBox.innerHTML = "";
+        dialogueBox.classList.remove("fade"); }, 2000);  // waits 3.5s, removes above
+}           // TEXT TAKES 2s TO TURN BLACK, FIX IT
+</script>
+</body>
+</html>
